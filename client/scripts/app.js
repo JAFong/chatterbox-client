@@ -1,9 +1,15 @@
-var app = {};
-app.init = function(){};
+var app = {
+  server: 'https://api.parse.com/1/classes/chatterbox'
+};
+app.init = function(){
+  $(document).ready(function(){
+  });
+};
+// app.init();
 app.send = function(message){
   $.ajax({
     // always use this url
-    url: 'https://api.parse.com/1/classes/chatterbox',
+    url: this.server,
     type: 'POST',
     data: JSON.stringify(message),
     contentType: 'application/json',
@@ -16,14 +22,17 @@ app.send = function(message){
     }
   });
 };
-app.fetch = function(url) {
+app.fetch = function() {
   $.ajax({
     // always use this url
-    url: url,
+    url: this.server,
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message recieved');
+      _.each(data.results, function(message){
+        app.addMessage(message);
+      });
     },
     error: function (data) {
       // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -35,8 +44,18 @@ app.clearMessages = function(){
   $('#chats').children().remove();
 };
 app.addMessage = function(message) {
-  $('#chats').append('<div>' + message.username + ": " + message.text + '</div>');
+  $('#chats').append('<div class=username>' + message.username + ": " + message.text + '</div>');
 };
 app.addRoom = function(roomName){
   $('#roomSelect').append('<div></div>');
 };
+$(document).ready(function(){
+  $('.username').on('click', function() {
+    console.log("clicked");
+  });
+});
+app.addFriend = function(username) {
+
+};
+// setInterval(function() {console.log(app.fetch())}, 500)
+app.fetch();
