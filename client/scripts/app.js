@@ -44,7 +44,10 @@ app.clearMessages = function(){
   $('#chats').children().remove();
 };
 app.addMessage = function(message) {
-  $('#chats').append('<div class=username>' + _.escape(message.username) + ": " + _.escape(message.text) + '</div>');
+
+  if (message.username !== undefined && message.text !== undefined){
+    $('#chats').append('<div class=username>' + _.escape(message.username) + ": " + _.escape(message.text) + '</div>');
+  }
 };
 app.addRoom = function(roomName){
   $('#roomSelect').append('<div></div>');
@@ -57,4 +60,16 @@ $(document).ready(function(){
 app.addFriend = function(username) {
 
 };
+$('#submit').on('click', function(e) {
+  e.preventDefault();
+  var futureMessage = {
+    'username': newUser,
+    'text': $('.messageBox').val()
+    // 'roomname': '4chan'
+  };
+  app.send(futureMessage);
+});
 setInterval(function(){app.fetch();}, 1000);
+
+/*
+*/
