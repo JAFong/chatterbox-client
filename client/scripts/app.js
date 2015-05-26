@@ -32,6 +32,9 @@ app.fetch = function() {
       // console.log('chatterbox: Message recieved');
       _.each(data.results, function(message){
         app.addMessage(message);
+        if(message.roomname){ //&& !$('#roomSelect').find('div').text('roomname')){
+          app.addRoom(message.roomname);
+        }
       });
     },
     error: function (data) {
@@ -63,8 +66,15 @@ app.addFriend = function(username) {
 
 };
 
+app.updatePage = function(roomName) {
+  clearInterval(intervalHandle);
+  $('#chats').find('div').remove();
+};
+
 var currentRoom = "home";
+var intervalHandle = null;
 $(document).ready(function(){
+  intervalHandle = window.setInterval(function(){app.fetch();}, 1000);
   // Submitting custom messages
  $('#submit').on('click', function(){
    $('.messageBox').submit();
@@ -93,11 +103,11 @@ $(document).ready(function(){
   $('.room').on('click', function(){
     var thisRoom = $(this).text();
     currentRoom = thisRoom;
-    intervalHandle = null;
+    app.updatePage(thisRoom);
+    // clearInterval(intervalHandle);
   })
  });
 // Entering created room
 });
 
-intervalHandle = window.setInterval(function(){app.fetch();}, 1000);
 
