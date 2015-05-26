@@ -29,7 +29,7 @@ app.fetch = function() {
     type: 'GET',
     contentType: 'application/json',
     success: function (data) {
-      console.log('chatterbox: Message recieved');
+      // console.log('chatterbox: Message recieved');
       _.each(data.results, function(message){
         app.addMessage(message);
       });
@@ -43,38 +43,61 @@ app.fetch = function() {
 app.clearMessages = function(){
   $('#chats').children().remove();
 };
-app.addMessage = function(message) {
 
+app.addMessage = function(message) {
   if (message.username !== undefined && message.text !== undefined){
     $('#chats').append('<div class=username>' + _.escape(message.username) + ": " + _.escape(message.text) + '</div>');
   }
 };
+
 app.addRoom = function(roomName){
-  $('#roomSelect').append('<div></div>');
+  $('#roomSelect').append('<div class=room>' + roomName + '</div>');
 };
-$(document).ready(function(){
-  $('.username').on('click', function() {
-    console.log("clicked");
-  });
-});
+
+// $(document).ready(function(){
+//   $('.username').on('click', function() {
+//     console.log("clicked");
+//   });
+// });
 app.addFriend = function(username) {
 
 };
+
+var currentRoom = "home";
 $(document).ready(function(){
- $('#submit').on('click', function(event){
-   console.log('submitting');
+  // Submitting custom messages
+ $('#submit').on('click', function(){
    $('.messageBox').submit();
  });
- $('.messageBox').submit(function(event){
+ $('.messageBox').submit(function(){
   var thisUser = window.location.search.slice(10);
   var thisText = $('.messageBox').val();
   var newMessage = {
     'username': thisUser,
-    'text': thisText
+    'text': thisText,
+    'roomname': currentRoom
   }
+  console.log(newMessage);
   app.send(newMessage);
  });
-})
 
-setInterval(function(){app.fetch();}, 1000);
+
+// Submitting new rooms
+
+ $('#submitRoom').on('click', function(){
+   $('.roomBox').submit();
+ });
+ $('.roomBox').submit(function(){
+  var roomText = $('.roomBox').val();
+  app.addRoom(roomText);
+  $('.room').on('click', function(){
+    var thisRoom = $(this).text();
+    currentRoom = thisRoom;
+    intervalHandle = null;
+  })
+ });
+// Entering created room
+});
+
+intervalHandle = window.setInterval(function(){app.fetch();}, 1000);
 

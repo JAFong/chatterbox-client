@@ -83,11 +83,18 @@ form input[type=text] {
     padding: 10px;
 }
 
-aside {
+#messageArea {
     position: absolute;
     top: 0px;
     left: 0px;
     margin-left: 20px;
+}
+
+#roomSelect {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-right: 20px;
 }
 
 textarea {
