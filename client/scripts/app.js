@@ -57,5 +57,4 @@ $(document).ready(function(){
 app.addFriend = function(username) {
 
 };
-// setInterval(function() {console.log(app.fetch())}, 500)
-app.fetch();
+setInterval(function(){app.fetch();}, 1000);
