@@ -60,16 +60,21 @@ $(document).ready(function(){
 app.addFriend = function(username) {
 
 };
-$('#submit').on('click', function(e) {
-  e.preventDefault();
-  var futureMessage = {
-    'username': newUser,
-    'text': $('.messageBox').val()
-    // 'roomname': '4chan'
-  };
-  app.send(futureMessage);
-});
+$(document).ready(function(){
+ $('#submit').on('click', function(event){
+   console.log('submitting');
+   $('.messageBox').submit();
+ });
+ $('.messageBox').submit(function(event){
+  var thisUser = window.location.search.slice(10);
+  var thisText = $('.messageBox').val();
+  var newMessage = {
+    'username': thisUser,
+    'text': thisText
+  }
+  app.send(newMessage);
+ });
+})
+
 setInterval(function(){app.fetch();}, 1000);
 
-/*
-*/
