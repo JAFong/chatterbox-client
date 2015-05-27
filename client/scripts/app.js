@@ -1,6 +1,7 @@
 var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
-  rooms: {home: []}
+  rooms: {home: []},
+  currentRoom: "home"
 };
 app.init = function(){
   $(document).ready(function(){
@@ -35,11 +36,19 @@ app.fetch = function() {
         if (message.roomname && !app.rooms[message.roomname]){ //&& !$('#roomSelect').find('div').text('roomname')){
           app.rooms[message.roomname] = [];
           app.addRoom(message.roomname);
-        } else {
+        } else if (!message.roomname) {
           message.roomname = "home";
         }
-        app.rooms[message.roomname].push(message);
-        app.addMessage(message);
+        var passed = true;
+        for (var j = 0; j < app.rooms[message.roomname].length; j++) {
+          if (app.rooms[message.roomname][j].objectId === message.objectId) {
+            passed = false;
+          }
+        }
+        if (passed){
+          app.rooms[message.roomname].push(message);
+          app.addMessage(message);
+        }
       });
     },
     error: function (data) {
@@ -63,6 +72,7 @@ app.addRoom = function(roomName){
   $('.room').on('click', function(){
     var thisRoom = $(this).text();
     app.updatePage(thisRoom);
+    app.currentRoom = thisRoom;
   })
 };
 
@@ -85,7 +95,6 @@ app.updatePage = function(roomName) {
   }
 };
 
-var currentRoom = "home";
 var intervalHandle = null;
 $(document).ready(function(){
   intervalHandle = window.setInterval(function(){app.fetch();}, 1000);
@@ -99,7 +108,7 @@ $(document).ready(function(){
   var newMessage = {
     'username': thisUser,
     'text': thisText,
-    'roomname': currentRoom
+    'roomname': app.currentRoom
   }
   console.log(newMessage);
   app.send(newMessage);
