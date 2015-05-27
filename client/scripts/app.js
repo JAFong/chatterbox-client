@@ -32,7 +32,7 @@ app.fetch = function() {
     contentType: 'application/json',
     success: function (data) {
       // console.log('chatterbox: Message recieved');
-      _.each(data.results, function(message){
+      _.each(data.results.reverse(), function(message){
         if (message.roomname && !app.rooms[message.roomname]){ //&& !$('#roomSelect').find('div').text('roomname')){
           app.rooms[message.roomname] = [];
           app.addRoom(message.roomname);
@@ -63,7 +63,7 @@ app.clearMessages = function(){
 
 app.addMessage = function(message) {
   if (message.username !== undefined && message.text !== undefined){
-    $('#chats').append('<div class=username>' + _.escape(message.username) + ": " + _.escape(message.text) + '</div>');
+    $('#chats').prepend('<div class=username>' + _.escape(message.username) + ": " + _.escape(message.text) + '</div>');
   }
 };
 
