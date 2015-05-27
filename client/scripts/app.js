@@ -63,8 +63,14 @@ app.clearMessages = function(){
 
 app.addMessage = function(message) {
   if (message.username !== undefined && message.text !== undefined){
-    $('#chats').prepend('<div class=username>' + _.escape(message.username) + ": " + _.escape(message.text) + '</div>');
+    $('#chats').prepend('<div>'+ '<span class="username ' + _.escape(message.username) + '" id=' + _.escape(message.username)+'>'+ _.escape(message.username) + '</span>' +
+    ": " + _.escape(message.text) + '</div>');
   }
+  $('.username').on('click', function(){
+    var thisId = $(this).attr('id');
+    console.log(thisId);
+    $("."+thisId+"").closest('div').addClass('friend');
+  });
 };
 
 app.addRoom = function(roomName){
@@ -124,7 +130,9 @@ $(document).ready(function(){
   var roomText = $('.roomBox').val();
   app.addRoom(roomText);
  });
-// Entering created room
+
+  // Click username
+
 });
 
 
